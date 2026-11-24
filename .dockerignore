@@ -1,0 +1,8 @@
+.git
+.env
+.env.*
+supabase.local.json
+**/__pycache__
+**/*.py[cod]
+.vscode
+.DS_Store

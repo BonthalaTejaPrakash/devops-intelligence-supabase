@@ -52,4 +52,17 @@ The signed-in **Main Projects** page includes a live Supabase workspace for proj
 
 To run the API locally, configure the Supabase variables, `FRONTEND_URL`, GitHub App variables, and the credentials for each CI/notification provider you use in the backend process environment, then run `uvicorn backend.main:app --reload --port 8080`. Jenkins pipelines use the saved workflow identifier as a Jenkins job path. CircleCI derives the project slug from `owner/repository`. GitLab accepts a namespace/project path. Azure DevOps uses a numeric pipeline ID plus `AZURE_DEVOPS_ORG` and `AZURE_DEVOPS_PROJECT`. Bitbucket uses a workspace/repository and may use a custom pipeline name; configure a Bitbucket API token rather than a deprecated app password. Set Resend's `RESEND_API_KEY` and a verified `NOTIFICATION_FROM_EMAIL` to enable email.
 
+## 4. Deploy the FastAPI backend
+
+The repository includes a Docker deployment definition and `render.yaml`. Deploy the repository root to a container host or Render Blueprint. Configure these environment variables on the backend host; never put them in `supabase.local.json`:
+
+- `SUPABASE_URL`
+- `SUPABASE_ANON_KEY`
+- `SUPABASE_SERVICE_ROLE_KEY`
+- `FRONTEND_URL` as the exact static-app origin
+- GitHub App/provider credentials only for providers you use
+- `RESEND_API_KEY` and `NOTIFICATION_FROM_EMAIL` for email
+
+After deployment, set `apiUrl` in `supabase.local.json` to the backend's public HTTPS origin. Deploy `index.html`, `src/`, and `supabase.local.json` together to the static host. The Docker image does not bundle browser configuration or server secrets.
+
 Configure GitHub App permissions for Actions read/write and Metadata read, and set its webhook URL to `/api/v1/webhooks/github` with the `workflow_run` event selected. Keep all provider tokens, the GitHub private key, webhook secret, and Supabase service-role key on the server only. User-facing database reads use the caller's access token; the service-role key is used only after authenticated provider actions and for webhook/delivery persistence.
