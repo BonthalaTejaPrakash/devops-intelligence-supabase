@@ -7,10 +7,21 @@ The static frontend uses src/workspace.mjs with supabase.local.json.
 import os
 from gotrue.errors import AuthApiError
 from supabase import create_client, Client
+from dotenv import load_dotenv
 
-SUPABASE_URL = os.getenv("SUPABASE_URL")
-SUPABASE_SERVICE_ROLE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY")  # SERVER ONLY
-SUPABASE_ANON_KEY = os.getenv("SUPABASE_ANON_KEY")
+load_dotenv()
+
+
+def configured_secret(name: str) -> str:
+    value = os.getenv(name, "").strip()
+    if not value or value.startswith("YOUR_") or value.startswith("CHANGE_ME"):
+        return ""
+    return value
+
+
+SUPABASE_URL = configured_secret("SUPABASE_URL")
+SUPABASE_SERVICE_ROLE_KEY = configured_secret("SUPABASE_SERVICE_ROLE_KEY")  # SERVER ONLY
+SUPABASE_ANON_KEY = configured_secret("SUPABASE_ANON_KEY")
 
 
 class InvalidAccessToken(ValueError):

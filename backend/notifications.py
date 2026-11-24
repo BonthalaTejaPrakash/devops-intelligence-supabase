@@ -22,7 +22,10 @@ class ResendNotifier:
     def from_environment(cls) -> "ResendNotifier":
         api_key = os.getenv("RESEND_API_KEY")
         from_email = os.getenv("NOTIFICATION_FROM_EMAIL")
-        if not api_key or not from_email:
+        if (
+            not api_key or api_key.startswith("YOUR_")
+            or not from_email or from_email.startswith("YOUR_")
+        ):
             raise NotificationConfigurationError(
                 "Set RESEND_API_KEY and NOTIFICATION_FROM_EMAIL on the backend."
             )

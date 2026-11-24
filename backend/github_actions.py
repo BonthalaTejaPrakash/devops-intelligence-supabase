@@ -40,7 +40,11 @@ class GitHubActions:
         app_id = os.getenv("GITHUB_APP_ID")
         private_key = os.getenv("GITHUB_APP_PRIVATE_KEY")
         installation_id = os.getenv("GITHUB_INSTALLATION_ID")
-        if not app_id or not private_key or not installation_id:
+        if (
+            not app_id or app_id.startswith("YOUR_")
+            or not private_key or private_key.startswith("YOUR_")
+            or not installation_id or installation_id.startswith("YOUR_")
+        ):
             raise GitHubConfigurationError(
                 "Set GITHUB_APP_ID, GITHUB_APP_PRIVATE_KEY, and GITHUB_INSTALLATION_ID."
             )
