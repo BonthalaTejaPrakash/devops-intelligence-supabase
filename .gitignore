@@ -1,0 +1,6 @@
+/.env
+/.env.*
+!/.env.example
+/supabase.local.json
+/supabase/.temp/
+/backend/__pycache__/

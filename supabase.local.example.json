@@ -1,0 +1,5 @@
+{
+  "url": "http://localhost:8000",
+  "publicKey": "YOUR_PUBLISHABLE_OR_ANON_KEY",
+  "apiUrl": "http://localhost:8080"
+}
