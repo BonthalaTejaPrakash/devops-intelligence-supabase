@@ -48,6 +48,12 @@ If Supabase is configured but saving returns a database error, verify that the p
 
 For static hosting, deploy `index.html`, the `src/` modules, and the configured `supabase.local.json` together. The browser config belongs in the deployment output and is ignored by Git. Keep server credentials and Docker or database environment files off the static host. The GitHub workflow deploys only from `main` or a manual dispatch; protect its `production` environment and store the Supabase deployment secrets there.
 
+## 5. Free GitHub Pages deployment
+
+The repository includes `.github/workflows/github-pages.yml`. It deploys the static app to GitHub Pages and generates `supabase.local.json` using the public Supabase URL and publishable key; no server secret is included.
+
+In **Settings → Pages**, set **Source** to **GitHub Actions**. Push to `main` or run the workflow manually.
+
 The signed-in **Main Projects** page includes a live Supabase workspace for projects, pipelines, runs, logs, reminders, integrations, notification history/preferences, audit records, and metrics. GitHub Actions run/retry/cancel/rollback dispatches through the authenticated FastAPI API; a signed `workflow_run` webhook synchronizes its actual run status. Jenkins, CircleCI, GitLab CI/CD, Azure DevOps, and Bitbucket Pipelines also support run/retry/cancel and manual status synchronization when their server-side credentials are configured. The Notifications tab sends a real transactional email to the signed-in user's address through Resend; it does not broadcast to every organization member.
 
 To run the API locally, configure the Supabase variables, `FRONTEND_URL`, GitHub App variables, and the credentials for each CI/notification provider you use in the backend process environment, then run `uvicorn backend.main:app --reload --port 8080`. Jenkins pipelines use the saved workflow identifier as a Jenkins job path. CircleCI derives the project slug from `owner/repository`. GitLab accepts a namespace/project path. Azure DevOps uses a numeric pipeline ID plus `AZURE_DEVOPS_ORG` and `AZURE_DEVOPS_PROJECT`. Bitbucket uses a workspace/repository and may use a custom pipeline name; configure a Bitbucket API token rather than a deprecated app password. Set Resend's `RESEND_API_KEY` and a verified `NOTIFICATION_FROM_EMAIL` to enable email.
