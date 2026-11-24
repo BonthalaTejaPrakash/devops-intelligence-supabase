@@ -4,3 +4,7 @@
 /supabase.local.json
 /supabase/.temp/
 /backend/__pycache__/
+__pycache__/
+*.py[cod]
+.DS_Store
+.vscode/
